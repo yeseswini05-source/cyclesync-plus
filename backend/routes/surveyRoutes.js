@@ -7,22 +7,26 @@ const SurveyLog = require("../models/SurveyLog");
 const UserCycle = require("../models/UserCycle");
 const { calculateCyclePhase } = require("../utils/cycleMath");
 
-// ✅ Save survey
+// ✅ Submit Survey
 router.post("/submit", protect, async (req, res) => {
   try {
     const userId = req.user.id;
     const data = req.body;
 
     // 1) Save survey log
-    await SurveyLog.create({ userId, ...data });
+    await SurveyLog.create({
+      userId,
+      ...data,
+      date: new Date()
+    });
 
-    // 2) Keep only last 30 logs (sort by createdAt if you use timestamps)
+    // 2) Keep only last 30 logs
     await SurveyLog.find({ userId })
       .sort({ createdAt: -1 })
       .skip(30)
       .deleteMany();
 
-    // 3) If bleeding recorded, update lastPeriodDate
+    // 3) Update cycle if bleeding logged
     if (data.bleedingLevel && data.bleedingLevel !== "none") {
       await UserCycle.findOneAndUpdate(
         { userId },
@@ -31,13 +35,10 @@ router.post("/submit", protect, async (req, res) => {
       );
     }
 
-    // 4) Re-load cycle doc
+    // 4) Re-load cycle
     const cycle = await UserCycle.findOne({ userId });
 
     let calc = null;
-
-    // 🔐 IMPORTANT:
-    // Only call calculateCyclePhase if we actually have a lastPeriodDate.
     if (cycle && cycle.lastPeriodDate) {
       calc = calculateCyclePhase(cycle.lastPeriodDate, cycle.cycleLength);
 
@@ -52,19 +53,19 @@ router.post("/submit", protect, async (req, res) => {
       );
     }
 
-    // 5) Respond safely – even if we don't have cycle yet
-    return res.json({
+    res.json({
+      success: true,
       message: "Survey saved ✅",
       ...(calc ? { phase: calc.phase, cycleDay: calc.day } : {}),
     });
+
   } catch (err) {
     console.error("Survey Save Error", err);
-    // ⬇️ send real error message so frontend sees what went wrong
-    return res.status(500).json({ message: err.message || "Server error" });
+    res.status(500).json({ success: false, message: err.message || "Server error" });
   }
 });
 
-// ✅ Get dashboard data
+// ✅ Get Results
 router.get("/results", protect, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -75,22 +76,25 @@ router.get("/results", protect, async (req, res) => {
 
     const cycle = await UserCycle.findOne({ userId });
 
-    res.json({ logs, cycle });
+    res.json({ success: true, logs, cycle });
   } catch (err) {
     console.error("Results Error", err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-// ✅ Get phase info
 router.get("/phase", protect, async (req, res) => {
   try {
     const userId = req.user.id;
     const cycle = await UserCycle.findOne({ userId });
 
+    if (!cycle || !cycle.lastPeriodDate) {
+      return res.json({ message: "No cycle data yet" });
+    }
+
     const calc = calculateCyclePhase(
-      cycle?.lastPeriodDate,
-      cycle?.cycleLength
+      cycle.lastPeriodDate,
+      cycle.cycleLength
     );
 
     res.json({
@@ -103,5 +107,6 @@ router.get("/phase", protect, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 module.exports = router;

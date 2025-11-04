@@ -19,13 +19,12 @@ router.post("/register", async (req, res) => {
     if (existing)
       return res.status(400).json({ message: "User already exists" });
 
-    // ✅ Hash once here
-    const hashed = await bcrypt.hash(password, 10);
+    // ❌ REMOVE manual hashing — let mongoose pre-save do it
 
     const newUser = new User({
       name,
       email,
-      password: hashed,
+      password,  // plain password → pre-save hook hashes it
       avatar: avatar || "avatar1",
     });
 
@@ -37,7 +36,6 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
 /**
  * LOGIN
  */

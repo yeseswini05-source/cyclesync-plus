@@ -12,8 +12,16 @@ const SurveyLogSchema = new mongoose.Schema(
     meal2: { type: Boolean },
     meal3: { type: Boolean },
     note: { type: String },
-  },
+    date: {
+  type: Date,
+  default: Date.now
+},
+
+},
+
+  
   { timestamps: true }
+  
 );
 
 module.exports = mongoose.model("SurveyLog", SurveyLogSchema);

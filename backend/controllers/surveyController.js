@@ -1,4 +1,12 @@
-const Recommendation = require("../models/recommendation");
+const mongoose = require("mongoose");
+
+const recommendationSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  text: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model("Recommendation", recommendationSchema);
 
 // --- Simple ML-like mapping (can be tuned later) ---
 function mapSurveyToPhase(survey) {
@@ -27,3 +35,24 @@ exports.analyzeSurvey = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+exports.submitSurvey = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { mood, pain, cravings, energy } = req.body;
+
+    const log = await SurveyLog.create({
+      user: userId,
+      mood,
+      pain,
+      cravings,
+      energy,
+      date: new Date()
+    });
+
+    res.json({ success: true, message: "Survey saved", log });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
