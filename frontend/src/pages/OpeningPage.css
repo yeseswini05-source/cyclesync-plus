@@ -1,0 +1,262 @@
+/* ========== PAGE / SECTION LAYOUT ========== */
+
+.opening-section {
+  position: relative;
+  width: 100%;
+  min-height: 1400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: #fffbe0;
+}
+
+/* Background layer: bg-yellow.png */
+.opening-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* === Top-right branch === */
+.branch-top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(28vw, 480px);
+  max-width: 600px;
+  height: auto;
+  z-index: 6; /* above bg, below foreground flowers */
+  pointer-events: none;
+  user-select: none;
+
+  /* start hidden for animation */
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+/* === Bottom greens strip (full-width) === */
+.greens-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;  /* sit at the bottom of the whole page */
+  width: 100%; /* edge-to-edge */
+  height: auto; /* keep aspect ratio */
+  z-index: 5;  /* above bg, under foreground elements */
+  pointer-events: none;
+  user-select: none;
+
+  /* start hidden for animation */
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+/* shared "show" class for decor */
+.show-decor {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stage (the composition area that holds all elements) */
+.opening-stage {
+  position: relative;
+  width: min(90vw, 1200px);
+  height: 1200px;
+  z-index: 1;
+}
+
+/* ========== WOMAN + FADE SWAP ========== */
+
+.woman {
+  position: absolute;
+  left: 50%;
+  bottom: 100px;
+  transform: translateX(-50%) scale(0.7);
+  transform-origin: bottom center;
+  width: 200%;
+  max-width: 900px;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+}
+
+.woman-alt {
+  position: absolute;
+  left: 50%;
+  bottom: 100px;
+  transform: translateX(-50%) scale(0.7);
+  transform-origin: bottom center;
+  width: 200%;
+  max-width: 900px;
+  z-index: 11;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 2s ease-in-out;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+/* ========== FLOWERS ========== */
+
+.flower-left {
+  position: absolute;
+  left: calc(32% - 200px);
+  bottom: 270px;
+  transform: translateX(-50%);
+  width: 137.5%;
+  max-width: 650px;
+  z-index: 13;
+  pointer-events: none;
+  user-select: none;
+
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+}
+
+.flower-left.show {
+  opacity: 1;
+}
+
+/* mirrored flower-left */
+.flower-left-mirror {
+  position: absolute;
+  left: calc(32% + 500px);
+  bottom: -280px;
+  transform: translateX(-50%) scaleX(-1);
+  width: 137.5%;
+  max-width: 650px;
+  z-index: 12;
+  pointer-events: none;
+  user-select: none;
+
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+}
+
+.flower-left-mirror.show {
+  opacity: 0.9;
+}
+
+/* flower-right (purple cluster on the right) */
+.flower-right {
+  position: absolute;
+  left: calc(65% + 200px);
+  bottom: 400px;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  z-index: 11;
+  pointer-events: none;
+  user-select: none;
+
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+}
+
+.flower-right.show {
+  opacity: 1;
+}
+
+/* ========== BOTTOM LEAVES ========== */
+.bottom-leaves {
+  position: absolute;
+  left: calc(45% - 100px);
+  bottom: 100px;
+  width: 150%;
+  max-width: 750px;
+  z-index: 14;
+  pointer-events: none;
+  user-select: none;
+
+  transform-origin: bottom right;
+  transform: translateX(-50%) rotate(-50deg);
+}
+
+/* ========== QUOTE BLOCK ========== */
+/* moved upward by +200px: 850px -> 1050px */
+.opening-quote-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #1a1a1a;
+  z-index: 20;
+  font-family: serif;
+  line-height: 1.4;
+  pointer-events: none;
+  user-select: none;
+  width: 80%;
+  max-width: 800px;
+}
+
+.quote-over-head {
+  bottom: 1050px;
+  width: 60%;
+  max-width: 600px;
+}
+
+/* smaller font + respect \n so we get 2 lines */
+.opening-quote-text {
+  font-size: 1.3rem;
+  line-height: 1.35;
+  font-style: italic;
+  font-weight: 400;
+  color: #2a2a2a;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 750px;
+  white-space: pre-line; /* keep the \n in the JS string as line break */
+}
+
+.opening-quote-text.short {
+  font-size: 1.3rem;
+  line-height: 1.35;
+  font-style: italic;
+  font-weight: 400;
+  color: #2a2a2a;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 750px;
+  white-space: pre-line;
+}
+
+/* ========== EXPLORE BUTTON (SKIP) ========== */
+.explore-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 20% 20%, #2a2a2a 0%, #4a4a4a 70%);
+  color: #fff;
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  z-index: 30;
+  box-shadow:
+    0 20px 48px rgba(0,0,0,0.25),
+    0 3px 6px rgba(0,0,0,0.4) inset;
+}
+.explore-btn:active {
+  scale: 0.98;
+}
