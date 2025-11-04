@@ -1,0 +1,156 @@
+[
+  {
+    "phase": "Menstrual",
+    "type": "food",
+    "title": "Warm Lentil Soup",
+    "why": "Iron + comforting during your flow",
+    "recipe": {
+      "title": "Warm Lentil Soup",
+      "description": "Hearty lentil soup with cumin and spinach.",
+      "ingredients": ["1 cup red lentils","2 cups water","1 cup spinach","1 onion","1 tsp cumin","salt"],
+      "steps": ["Saute onion","Add lentils and water","Cook 15-20 min","Add spinach & season"],
+      "minutes": 25,
+      "servings": 2,
+      "calories": 320,
+      "veg": true,
+      "budget": "low",
+      "tags": ["iron","warm","easy"]
+    },
+    "quick": ["Saute onion","Boil lentils","Stir spinach"],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["hostel-a-block","mess"]
+  },
+  {
+    "phase": "Menstrual",
+    "type": "activity",
+    "title": "Gentle Pelvic Stretch (8 mins)",
+    "why": "Eases cramps and reduces tension",
+    "quick": ["Child pose 2 min","Knees-to-chest 2 min","Supine twist 4 min"],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["home","hostel-a-block"]
+  },
+  {
+    "phase": "Menstrual",
+    "type": "sleep",
+    "title": "Warm bath + 20-min nap",
+    "why": "Heat relaxes muscles and improves sleep quality during this phase",
+    "quick": [],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["home"]
+  },
+  {
+    "phase": "Follicular",
+    "type": "food",
+    "title": "Spinach + Paneer Wrap",
+    "why": "Iron + protein during follicular rebuild",
+    "recipe": {
+      "title": "Spinach + Paneer Wrap",
+      "ingredients": ["roti","spinach","paneer","spices"],
+      "steps": ["Saute spinach","Add paneer","Wrap up"],
+      "minutes": 10,
+      "servings": 1,
+      "calories": 420,
+      "veg": true,
+      "budget": "low",
+      "tags": ["iron","protein","quick"]
+    },
+    "quick": ["Saute spinach","Add paneer","Wrap"],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["hostel-a-block","mess","home"]
+  },
+  {
+    "phase": "Follicular",
+    "type": "activity",
+    "title": "Outdoor jog or brisk walk (20 mins)",
+    "why": "Boosts energy and supports follicular phase strength",
+    "quick": ["5 min warm-up","15 min brisk walk"],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["campus","outdoors"]
+  },
+  {
+    "phase": "Follicular",
+    "type": "sleep",
+    "title": "Power nap (15-min)",
+    "why": "Short nap boosts alertness without interfering with night sleep",
+    "quick": [],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["home","hostel-a-block"]
+  },
+  {
+    "phase": "Ovulation",
+    "type": "food",
+    "title": "Greek Yogurt + Nuts Bowl",
+    "why": "Protein + healthy fats to support energy & mood",
+    "recipe": {
+      "title": "Greek Yogurt Bowl",
+      "ingredients": ["1 cup greek yogurt","2 tbsp mixed nuts","1 tbsp honey","berries optional"],
+      "steps": ["Add nuts to yogurt","Drizzle honey","Top berries"],
+      "minutes": 3,
+      "servings": 1,
+      "calories": 300,
+      "veg": true,
+      "budget": "medium",
+      "tags": ["protein","quick","snack"]
+    },
+    "quick": ["Spoon yogurt","Top nuts","Add honey"],
+    "budget": "medium",
+    "veg": true,
+    "locationTags": ["hostel-a-block","mess","home"]
+  },
+  {
+    "phase": "Ovulation",
+    "type": "activity",
+    "title": "High-intensity interval workout (20 mins)",
+    "why": "Take advantage of peak energy during ovulation",
+    "quick": ["30 sec sprint","30 sec rest ×10","cool down 2 min"],
+    "budget": "medium",
+    "veg": true,
+    "locationTags": ["gym","home"]
+  },
+  {
+    "phase": "Ovulation",
+    "type": "sleep",
+    "title": "Consistent bed time + blackout room",
+    "why": "Maintain rhythm during high activity phase",
+    "quick": [],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["home"]
+  },
+  {
+    "phase": "Luteal",
+    "type": "food",
+    "title": "Dark Chocolate + Almonds",
+    "why": "Balances low magnesium and soothes stress-driven cravings",
+    "quick": ["1 square dark chocolate + small handful almonds"],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["hostel-a-block","home"]
+  },
+  {
+    "phase": "Luteal",
+    "type": "activity",
+    "title": "Gentle yoga flow (15 mins)",
+    "why": "Supports calming and prevents bloating during luteal phase",
+    "quick": ["Cat/cow 2 min","Pigeon pose 5 min","Legs-up-the-wall 8 min"],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["home","hostel-a-block"]
+  },
+  {
+    "phase": "Luteal",
+    "type": "sleep",
+    "title": "Avoid caffeine after 4 pm",
+    "why": "Caffeine can worsen sleep during luteal phase; try herbal tea",
+    "quick": [],
+    "budget": "low",
+    "veg": true,
+    "locationTags": ["home","hostel-a-block"]
+  }
+]
