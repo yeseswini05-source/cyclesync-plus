@@ -10,27 +10,24 @@ import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import DashboardPage from "../pages/DashboardPage";
 import SurveyPage from "../pages/SurveyPage";
 import TrackerPage from "../pages/TrackerPage";
+import Hero from "../pages/Hero";  // ✅ fixed import
+import CycleTracker from "./pages/CycleTracker";
 
-// if you have other pages, import them here too
 
 export default function AppRouter() {
   return (
     <Routes>
-      {/*
-        DEFAULT ENTRY:
-        When the app loads at "/", we show OpeningPage first.
-      */}
+
+      {/* ✅ Default Route */}
       <Route path="/" element={<OpeningPage />} />
 
-      {/* after opening animation you can navigate("/landing") */}
+      {/* ✅ Public Pages */}
       <Route path="/landing" element={<LandingPage />} />
-
-      {/* auth-related */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-      {/* gated pages */}
+      {/* ✅ Protected Routes */}
       <Route
         path="/dashboard"
         element={
@@ -57,10 +54,20 @@ export default function AppRouter() {
           </ProtectedRoute>
         }
       />
-      
 
-      {/* you can keep any dev / debug routes if you had them */}
-      {/* <Route path="/dev-tools" element={<DevToolsDebugLogin />} /> */}
+      {/* ✅ Hero after survey (NOT replacing main / route) */}
+      <Route
+        path="/hero"
+        element={
+          <ProtectedRoute>
+            <Hero />
+          </ProtectedRoute>
+        }
+        
+      />
+      <Route path="/cycle-tracker" element={<CycleTracker />} />
+
+
     </Routes>
   );
 }

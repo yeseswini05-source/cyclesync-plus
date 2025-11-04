@@ -1,38 +1,83 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FeaturePageLayout from "../components/FeaturePageLayout";
 
 export default function PhaseTrackerPage() {
+  const [phaseData, setPhaseData] = useState(null);
+  const [checkedAuth, setCheckedAuth] = useState(false);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    async function fetchPhase() {
+      if (!token) {
+        setCheckedAuth(true);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/survey/phase", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await res.json();
+        console.log("phase data:", data); // ✅ Debug helper
+
+        if (data?.phase) {
+          setPhaseData(data);
+        }
+      } catch (err) {
+        console.error("Phase fetch error", err);
+      } finally {
+        setCheckedAuth(true);
+      }
+    }
+
+    fetchPhase();
+  }, [token]);
+
+  // Wait until we know if user has token or not
+  if (!checkedAuth) return <div className="p-6">Loading...</div>;
+
+  // ✅ Logged in + has phase data
+  if (phaseData) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-2">Your Phase Tracker</h1>
+        <p className="text-gray-600 mb-6">
+          Based on your cycle logs & symptoms
+        </p>
+
+        <div className="bg-pink-50 border border-pink-200 rounded-lg p-5">
+          <h2 className="text-xl font-bold text-pink-700 mb-2">
+            You're in the <span className="capitalize">{phaseData.phase}</span> phase
+          </h2>
+
+          <p className="text-gray-700 mb-2">Cycle day: {phaseData.cycleDay}</p>
+          <p className="text-gray-700 mb-2">
+            Next period:{" "}
+            {new Date(phaseData.nextPeriod).toLocaleDateString()}
+          </p>
+
+          <p className="mt-4 text-sm text-gray-500">
+            These predictions improve as you log more surveys
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ❗ Not logged in OR no phase logs yet → show hero page
   return (
     <FeaturePageLayout
       eyebrow="Phase Tracker"
       title="See which phase you're in right now — and what it means"
-      blurb={`We map menstrual, follicular, ovulation, and luteal phases; how long
-they usually last for you; and what each phase tends to do to energy,
-focus, mood, and appetite. No guessing, no “just push through.”`}
+      blurb={`Track your menstrual cycle phases with insights for energy, mood, and focus.`}
       ctaLabel="Log in to start tracking"
       ctaTo="/login"
     >
       <div className="text-sm leading-relaxed text-[#3a2326] space-y-4">
-        <p>
-          • Live status like “You’re in luteal,” not generic averages.
-        </p>
-        <p>
-          • We highlight what's normal for you (cravings, brain fog, pain)
-          so you stop thinking you're broken every month.
-        </p>
-        <p>
-          • Forecast what’s next so you can plan high-energy days and low-energy
-          days instead of forcing same output every single day.
-        </p>
-
-        <div className="bg-[#fff7fa] border border-[#ffd3e2] rounded-lg p-4 text-[13px] leading-relaxed text-[#512835]">
-          <div className="font-semibold text-[#c51a5a] mb-1">Coming soon:</div>
-          <ul className="list-disc pl-4 space-y-1">
-            <li>Cycle drift alerts (your timing is shifting)</li>
-            <li>PMS window prediction</li>
-            <li>“Chill, you’re probably not pregnant” reassurance mode</li>
-          </ul>
-        </div>
+        <p>• Live status like “You’re in luteal,” not averages</p>
+        <p>• Personalized symptoms, energy & focus insights</p>
+        <p>• Forecast your next phases to plan your life better</p>
       </div>
     </FeaturePageLayout>
   );

@@ -1,6 +1,6 @@
 // src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import api from "../services/api";
+import { fetchCurrentUser } from "../services/api";
 
 const AuthContext = createContext(null);
 
@@ -29,8 +29,8 @@ export function AuthProvider({ children }) {
         return;
       }
       try {
-        const res = await api.get("/auth/me"); // backend returns { user: {...} }
-        setUser(res.data.user);
+const data = await fetchCurrentUser();
+setUser(data.user);
       } catch (err) {
         // token invalid/expired
         localStorage.removeItem("cyclesync_token");

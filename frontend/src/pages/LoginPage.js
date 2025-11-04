@@ -1,114 +1,87 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
 
 export default function LoginPage() {
-  const nav = useNavigate();
-  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [err, setErr] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setErr("");
-    setLoading(true);
+    setError("");
 
     try {
-      // loginUser → POST /api/auth/login → returns { token, user }
-      const res = await loginUser(form);
+      const res = await loginUser({ email, password });
 
-      const { token, user } = res || {};
-      if (!token || !user) {
-        throw new Error("Invalid response from server");
+      if (res.data?.token) {
+localStorage.setItem("cyclesync_token", res.data.token);
+
+        // ✅ Go to Survey first
+        navigate("/survey");
+      } else {
+        setError("Invalid server response");
       }
-
-      // store token (same key apiClient can read)
-      localStorage.setItem("cyclesync_token", token);
-
-      // update global auth context
-      login(token, user);
-
-      // go to dashboard
-      nav("/survey");
-    } catch (error) {
-      setErr(error.message || "Login failed");
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error(err?.response?.data);
+      setError(err?.response?.data?.message || "Invalid email or password");
     }
-  }
+  };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-roseBg p-6">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-soft border border-roseMain/20 p-6">
-        <h2 className="text-xl font-semibold text-roseDeep mb-1">
-          Welcome back
-        </h2>
-        <p className="text-sm text-night/60 mb-4">
-          Sign in to access your dashboard.
-        </p>
+    <div className="w-full flex items-center justify-center min-h-screen bg-pink-50 p-4">
+      <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-10">
+        <h2 className="text-2xl font-bold text-pink-600 mb-1">Welcome back</h2>
+        <p className="text-sm text-gray-500 mb-6">Sign in to continue.</p>
 
-        {err && (
-          <div className="text-red-600 text-xs bg-red-50 border border-red-200 rounded p-2 mb-3">
-            {err}
+        {error && (
+          <div className="bg-red-100 text-red-700 py-2 px-3 mb-4 rounded">
+            {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-sm">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-medium text-night text-xs mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium">Email</label>
             <input
-              className="w-full rounded-xl border border-roseMain/30 px-3 py-3 bg-white shadow-soft"
               type="email"
+              className="w-full p-3 border rounded-lg bg-blue-50 mt-1"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              value={form.email}
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
             />
           </div>
 
           <div>
-            <label className="block font-medium text-night text-xs mb-1">
-              Password
-            </label>
+            <label className="block text-sm font-medium">Password</label>
             <input
-              className="w-full rounded-xl border border-roseMain/30 px-3 py-3 bg-white shadow-soft"
               type="password"
+              className="w-full p-3 border rounded-lg mt-1"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              value={form.password}
-              onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
-              }
             />
           </div>
 
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full rounded-full bg-roseMain text-white font-semibold py-3 shadow-card text-sm transition-transform ${
-              loading
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:scale-[1.02] active:scale-[0.98]"
-            }`}
+            className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-full font-semibold"
           >
-            {loading ? "Signing you in..." : "Sign In"}
+            Sign In
           </button>
         </form>
 
-        <div className="text-[11px] text-night/60 flex items-center justify-between mt-4">
-          <Link to="/forgot-password" className="text-roseDeep font-medium">
+        <div className="flex justify-between text-sm mt-4">
+          <button onClick={() => navigate("/forgot-password")} className="text-pink-500">
             Forgot password?
-          </Link>
-          <Link to="/signup" className="text-roseDeep font-medium">
+          </button>
+          <button onClick={() => navigate("/register")} className="text-pink-500">
             Sign up
-          </Link>
+          </button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
