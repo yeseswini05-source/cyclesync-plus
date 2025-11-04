@@ -25,3 +25,24 @@ module.exports = {
   },
   plugins: [],
 };
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        heading: ['"Playfair Display"', "serif"],
+        body: ['"Nunito Sans"', "system-ui", "sans-serif"],
+      },
+      colors: {
+        // optional: colors similar to the design
+        banana: "#FFEFB5", // page bg
+        broccoli: "#6C9A3C", // CTA
+        broccoliDark: "#4F6F2B",
+      },
+    },
+  },
+  plugins: [],
+};
+

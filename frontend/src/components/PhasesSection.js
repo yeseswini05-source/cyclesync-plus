@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { Typography } from "./Typography";
 
 export default function PhasesSection() {
   const phases = [
@@ -45,10 +46,8 @@ export default function PhasesSection() {
     },
   ];
 
-  // which phase is front / active
   const [active, setActive] = useState(0);
 
-  // go to next / prev in a loop
   function nextCard() {
     setActive((i) => (i + 1) % phases.length);
   }
@@ -56,8 +55,6 @@ export default function PhasesSection() {
     setActive((i) => (i - 1 + phases.length) % phases.length);
   }
 
-  // helper: for each card, compute its "slot" relative to active
-  // slot = 0 means front/center, 1 means next clockwise, etc
   function slotFor(index) {
     const len = phases.length;
     return (index - active + len) % len;
@@ -74,44 +71,54 @@ export default function PhasesSection() {
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
         {/* Heading */}
-        <motion.h2
-          className="
-            font-semibold text-[#3F3A2C]
-            text-[1.6rem] leading-[1.25]
-            sm:text-[2rem] sm:leading-[1.2]
-            max-w-[40rem]
-            tracking-[-0.02em]
-          "
-          style={{ wordBreak: "keep-all" }}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{ wordBreak: "keep-all" }}
         >
-          Your body changes across four phases.
-          <br className="hidden sm:block" />
-          Not just “on your period / off your period.”
-        </motion.h2>
+          <Typography
+            variant="sectionTitle"
+            as="h2"
+            className="
+              font-heading text-[#3F3A2C]
+              text-[1.6rem] sm:text-[2rem] md:text-[2.3rem]
+              leading-[1.25] tracking-[-0.02em]
+              max-w-[40rem]
+            "
+          >
+            <span className="text-[#6B7D38]">
+              Your body changes across four phases.
+            </span>
+            <br className="hidden sm:block" />
+            Not just “on your period / off your period.”
+          </Typography>
+        </motion.div>
 
         {/* Subtext */}
-        <motion.p
-          className="
-            mt-5
-            text-[15px] leading-relaxed
-            max-w-[36rem] mx-auto
-            tracking-[-0.01em]
-            text-[#5A4A37]
-          "
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
         >
-          Menstrual · Follicular · Ovulation · Luteal. Each phase has different
-          hormones, different fuel needs, and different ideal workloads. When
-          you stop forcing yourself to be “the same every day,” your body
-          calms.
-        </motion.p>
+          <Typography
+            variant="body"
+            className="
+              mt-5
+              text-[15px] leading-relaxed
+              max-w-[36rem] mx-auto
+              tracking-[-0.01em]
+              text-[#5A4A37]
+            "
+          >
+            Menstrual · Follicular · Ovulation · Luteal. Each phase has
+            different hormones, different fuel needs, and different ideal
+            workloads. When you stop forcing yourself to be “the same every
+            day,” your body calms.
+          </Typography>
+        </motion.div>
 
         {/* === circular carousel area === */}
         <div className="relative w-full mt-16 flex flex-col items-center">
@@ -132,9 +139,12 @@ export default function PhasesSection() {
               ‹
             </button>
 
-            <div className="text-[12px] text-[#8C7A61] select-none">
+            <Typography
+              variant="bodySm"
+              className="text-[12px] text-[#8C7A61] select-none"
+            >
               tap / click arrows to move
-            </div>
+            </Typography>
 
             <button
               onClick={nextCard}
@@ -155,36 +165,25 @@ export default function PhasesSection() {
           {/* 3D ring container */}
           <div
             className="relative h-[560px] w-full flex items-center justify-center overflow-visible"
-            style={{
-              perspective: "1600px",
-            }}
+            style={{ perspective: "1600px" }}
           >
             {phases.map((phase, index) => {
               const slot = slotFor(index);
 
-              let rotateY = 0;
-              let translateZ = 0;
-              let translateX = 0;
-              let blur = "0px";
-              let opacity = 1;
-              let scale = 1;
-              let shadow =
-                "0 70px 160px rgba(0,0,0,0.22), 0 16px 36px rgba(0,0,0,0.14)";
-              let zIndex = 10;
-
-              if (slot === 0) {
-                // front / active
-                rotateY = 0;
-                translateZ = 250;
-                translateX = 0;
-                blur = "0px";
-                opacity = 1;
-                scale = 1;
-                zIndex = 30;
+              let rotateY = 0,
+                translateZ = 0,
+                translateX = 0,
+                blur = "0px",
+                opacity = 1,
+                scale = 1,
+                zIndex = 10,
                 shadow =
                   "0 70px 160px rgba(0,0,0,0.22), 0 16px 36px rgba(0,0,0,0.14)";
+
+              if (slot === 0) {
+                translateZ = 250;
+                zIndex = 30;
               } else if (slot === 1) {
-                // right / turning away
                 rotateY = -35;
                 translateZ = 100;
                 translateX = 260;
@@ -194,17 +193,13 @@ export default function PhasesSection() {
                 zIndex = 5;
                 shadow = "0 30px 60px rgba(0,0,0,0.07)";
               } else if (slot === 2) {
-                // back / far
                 rotateY = 180;
                 translateZ = -200;
-                translateX = 0;
-                blur = "4px";
                 opacity = 0.2;
                 scale = 0.8;
                 zIndex = 1;
                 shadow = "0 10px 20px rgba(0,0,0,0.04)";
               } else if (slot === 3) {
-                // left / turning away
                 rotateY = 35;
                 translateZ = 100;
                 translateX = -260;
@@ -258,6 +253,7 @@ export default function PhasesSection() {
 }
 
 /* one visible card in the 3D ring */
+/* one visible card in the 3D ring */
 function CarouselCard({ phase, styleConfig }) {
   const olive = "#6b7d38";
 
@@ -271,8 +267,8 @@ function CarouselCard({ phase, styleConfig }) {
         border border-[#E0CFB3]
         bg-[rgba(248,241,229,0.9)]
         backdrop-blur-2xl
-        p-8
-        flex flex-col
+        p-10
+        flex flex-col items-center justify-center text-center
       "
       style={{
         transformStyle: "preserve-3d",
@@ -295,60 +291,82 @@ function CarouselCard({ phase, styleConfig }) {
         className="absolute inset-0 rounded-[2rem] pointer-events-none opacity-[0.75] blur-3xl -z-10"
         style={{
           background: `
-            radial-gradient(
-              circle at 20% 0%,
-              rgba(245, 231, 209, 0.9) 0%,
-              rgba(245, 231, 209, 0) 55%
-            ),
-            radial-gradient(
-              circle at 75% 90%,
-              rgba(107, 125, 56, 0.28) 0%,
-              rgba(107, 125, 56, 0) 65%
-            )
+            radial-gradient(circle at 20% 0%, rgba(245, 231, 209, 0.9) 0%, rgba(245, 231, 209, 0) 55%),
+            radial-gradient(circle at 75% 90%, rgba(107, 125, 56, 0.28) 0%, rgba(107, 125, 56, 0) 65%)
           `,
         }}
       />
 
       {/* header */}
       <div className="mb-6">
-        <div className="text-[#3F3A2C] text-[1.05rem] font-semibold leading-snug tracking-[-0.03em]">
+        <Typography
+          variant="sectionTitle"
+          as="h3"
+          className="font-heading text-[#3F3A2C] text-[1.2rem] leading-snug tracking-[-0.03em]"
+        >
           {phase.name} phase
-        </div>
+        </Typography>
 
-        <div className="inline-block text-[12px] leading-none font-medium px-3 py-[5px] rounded-full border border-[#D5C4A8] bg-[#F5ECDD]/80 text-[#6B7D38] shadow-soft mt-3">
+        <Typography
+          variant="bodySm"
+          className="
+            inline-block mt-3
+            text-[12px] leading-none font-medium
+            px-3 py-[5px] rounded-full
+            border border-[#D5C4A8]
+            bg-[#F5ECDD]/80
+            text-[#6B7D38]
+            shadow-soft
+          "
+        >
           {phase.range}
-        </div>
+        </Typography>
       </div>
 
       {/* content */}
-      <div className="space-y-5 text-[14px] leading-relaxed text-[#4F4334] max-w-[90%]">
+      <div className="space-y-5 text-[14px] leading-relaxed text-[#4F4334] w-full px-6">
         {/* hormones */}
         <section>
-          <div className="text-[12px] font-semibold tracking-[-0.02em] mb-1 text-[#6B7D38]">
+          <Typography
+            variant="subTitle"
+            className="uppercase text-[11px] tracking-[0.18em] mb-1 text-[#6B7D38] font-semibold"
+          >
             What your body is doing
-          </div>
-          <div className="text-[#4F4334] text-[14px]">{phase.hormones}</div>
+          </Typography>
+          <Typography variant="body" className="text-[#4F4334] text-[14px]">
+            {phase.hormones}
+          </Typography>
         </section>
 
         {/* feel */}
         <section>
-          <div className="text-[12px] font-semibold tracking-[-0.02em] mb-1 text-[#3F3A2C]">
+          <Typography
+            variant="subTitle"
+            className="uppercase text-[11px] tracking-[0.18em] mb-1 text-[#3F3A2C] font-semibold"
+          >
             How you might feel
-          </div>
-          <div className="text-[#4F4334] text-[14px]">{phase.feel}</div>
+          </Typography>
+          <Typography variant="body" className="text-[#4F4334] text-[14px]">
+            {phase.feel}
+          </Typography>
         </section>
 
         {/* care */}
         <section>
-          <div
-            className="text-[12px] font-semibold tracking-[-0.02em] mb-1"
+          <Typography
+            variant="subTitle"
+            className="uppercase text-[11px] tracking-[0.18em] mb-1 font-semibold"
             style={{ color: olive }}
           >
             How to support it
-          </div>
-          <div className="text-[#4F4334] text-[14px]">{phase.care}</div>
+          </Typography>
+          <Typography variant="body" className="text-[#4F4334] text-[14px]">
+            {phase.care}
+          </Typography>
         </section>
       </div>
     </motion.div>
   );
 }
+
+

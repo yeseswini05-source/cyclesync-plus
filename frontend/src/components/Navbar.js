@@ -1,10 +1,10 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
+import { Typography } from "./Typography"; // ⬅️ import the shared Typography component
 
 export default function Navbar({ isDark = false }) {
-  // Olive & beige theme (static)
   const linkBase =
-    "text-[#3A3F1D]/70 hover:text-[#5B6B2F] transition-colors font-medium";
+    "text-[#3A3F1D]/70 hover:text-[#5B6B2F] transition-colors";
   const linkActive = "text-[#5B6B2F] font-semibold";
 
   return (
@@ -16,13 +16,21 @@ export default function Navbar({ isDark = false }) {
             <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#5B6B2F] to-[#A6B86E] shadow-card border border-[#EEE7C9] flex items-center justify-center text-[#1E1E1A] text-[11px] font-semibold">
               CSP
             </div>
+
             <div className="flex flex-col leading-tight">
-              <span className="text-[14px] font-semibold text-[#3A3F1D] group-hover:text-[#5B6B2F] transition-colors">
+              <Typography
+                variant="nav"
+                className="text-[14px] text-[#3A3F1D] group-hover:text-[#5B6B2F] font-semibold transition-colors"
+              >
                 CycleSync Plus
-              </span>
-              <span className="text-[11px] text-[#3A3F1D]/70">
+              </Typography>
+
+              <Typography
+                variant="bodySm"
+                className="text-[11px] text-[#3A3F1D]/70"
+              >
                 Wellness &amp; cycle insights
-              </span>
+              </Typography>
             </div>
           </Link>
 
@@ -31,63 +39,67 @@ export default function Navbar({ isDark = false }) {
             <NavLink
               to="/posts"
               className={({ isActive }) =>
-                isActive ? linkActive : linkBase
+                `${isActive ? linkActive : linkBase}`
               }
             >
-              Posts
+              <Typography variant="nav">Posts</Typography>
             </NavLink>
 
             <NavLink
               to="/notifications"
               className={({ isActive }) =>
-                isActive ? linkActive : linkBase
+                `${isActive ? linkActive : linkBase}`
               }
             >
-              Notifications
+              <Typography variant="nav">Notifications</Typography>
             </NavLink>
 
             <NavLink
               to="/survey"
               className={({ isActive }) =>
-                isActive ? linkActive : linkBase
+                `${isActive ? linkActive : linkBase}`
               }
             >
-              Survey
+              <Typography variant="nav">Survey</Typography>
             </NavLink>
 
             <NavLink
               to="/chat"
               className={({ isActive }) =>
-                isActive ? linkActive : linkBase
+                `${isActive ? linkActive : linkBase}`
               }
             >
-              Chat
+              <Typography variant="nav">Chat</Typography>
             </NavLink>
 
             <NavLink
               to="/admin"
               className={({ isActive }) =>
-                isActive ? linkActive : linkBase
+                `${isActive ? linkActive : linkBase}`
               }
             >
-              Admin
+              <Typography variant="nav">Admin</Typography>
             </NavLink>
           </nav>
 
           {/* right: auth buttons */}
-          <div className="flex items-center gap-2 text-[13px] font-medium">
+          <div className="flex items-center gap-2 text-[13px]">
             <Link
               to="/login"
               className="px-4 py-2 rounded-full border border-[#8A9A5B]/50 bg-[#F8F3DF] text-[#5B6B2F] shadow-soft hover:scale-[1.03] active:scale-[0.98] transition-transform"
             >
-              Log in
+              <Typography variant="button" className="text-[#5B6B2F]">
+                Log in
+              </Typography>
             </Link>
 
             <Link
               to="/signup"
               className="px-4 py-2 rounded-full bg-gradient-to-r from-[#8A9A5B] to-[#5B6B2F] text-[#F8F3DF] shadow-card border border-[#8A9A5B]/70 hover:scale-[1.03] active:scale-[0.98] transition-transform"
             >
-              Sign up
+              <Typography variant="button" className="text-[#F8F3DF]">
+                Sign up
+              </Typography>
             </Link>
           </div>
         </div>
