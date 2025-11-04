@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useAnimation, useInView } from "framer-motion";
+import { Typography } from "./Typography"; // ⬅️ added
 
 /* ============================
    Animation variant constants
@@ -86,29 +87,44 @@ export default function HeroSection({ isLoggedIn }) {
                 <span className="text-[#4B5320]/60">Beta</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl font-semibold text-[#3A3F1D] leading-tight">
+              {/* HERO TITLE USING TYPOGRAPHY */}
+              <Typography
+                variant="heroTitle"
+                as="h1"
+                className="text-[#3A3F1D]"
+              >
                 Your Healthy Life
                 <br className="hidden sm:block" />
                 Grows Here
-              </h1>
+              </Typography>
 
-              <p className="text-[#3A3F1D]/70 text-[15px] leading-relaxed mt-4 max-w-md">
+              {/* BODY COPY USING TYPOGRAPHY */}
+              <Typography
+                variant="body"
+                className="text-[#3A3F1D]/70 text-[15px] mt-4 max-w-md"
+              >
                 One stop for food, rest, and movement — guided by your body.
                 Support your natural rhythm with mindful nutrition and balance.
-              </p>
+              </Typography>
 
               <div className="mt-8 flex flex-col sm:flex-row gap-3 text-sm font-medium">
                 <Link
                   to="/signup"
                   className="flex-1 sm:flex-none text-center rounded-full bg-[#8A9A5B] text-[#F8F3DF] py-3 px-6 hover:bg-[#6F7C46] active:scale-[0.98] transition-transform"
                 >
-                  Get Started
+                  <Typography variant="button" className="text-[#F8F3DF]">
+                    Get Started
+                  </Typography>
                 </Link>
               </div>
 
-              <div className="text-[11px] text-[#3A3F1D]/60 mt-6">
+              {/* TAGLINE USING TYPOGRAPHY */}
+              <Typography
+                variant="bodySm"
+                className="text-[#3A3F1D]/60 mt-6"
+              >
                 Private tracking • Cycle-aligned nutrition • Mindful recovery
-              </div>
+              </Typography>
             </>
           ) : (
             // 🟩 LOGGED-IN VIEW: square dashboard tab instead of marketing text
@@ -127,9 +143,13 @@ export default function HeroSection({ isLoggedIn }) {
               "
             >
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-semibold text-[#3C3424]">
+                <Typography
+                  variant="bodySm"
+                  as="h2"
+                  className="text-sm font-semibold text-[#3C3424]"
+                >
                   Today&apos;s Dashboard
-                </h2>
+                </Typography>
                 <span className="text-[10px] px-2 py-1 rounded-full bg-[#E5DFC7] text-[#5F4F2E]">
                   Live
                 </span>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Typography } from "./Typography";
 
 export default function AppFeaturesSection() {
   const features = [
@@ -60,22 +61,16 @@ export default function AppFeaturesSection() {
   const getLayoutClasses = (title) => {
     switch (title) {
       case "Phase Tracker":
-        // Row 1, col 1–2
         return "md:col-start-1 md:row-start-1 md:col-span-2";
       case "Daily Check-in":
-        // Row 1, col 3
         return "md:col-start-3 md:row-start-1";
       case "Food & Recipe Recs":
-        // Row 2, col 1
         return "md:col-start-1 md:row-start-2";
       case "Activity & Rest Guidance":
-        // Row 2, col 2
         return "md:col-start-2 md:row-start-2";
       case "Nutrient Signals":
-        // Row 3, col 1–2
         return "md:col-start-1 md:row-start-3 md:col-span-2";
       case "Your Dashboard":
-        // Col 3 for rows 2 & 3 (vertical card)
         return "md:col-start-3 md:row-start-2 md:row-span-2";
       default:
         return "";
@@ -88,61 +83,51 @@ export default function AppFeaturesSection() {
       className="
         py-20 px-4
         bg-gradient-to-b
-        from-[#E5D0B3] via-[#EDE2CF] to-[#E2D2B7]  /* tweak 'from' to match previous section exactly if needed */
+        from-[#E5D0B3] via-[#EDE2CF] to-[#E2D2B7]
         border-t border-[#D6C1A0]/70
         backdrop-blur-xl
       "
     >
       <div className="max-w-6xl mx-auto">
-        {/* Top heading */}
-        <motion.h2
-          className="
-            text-center
-            text-3xl sm:text-5xl
-            font-semibold
-            text-[#223021]
-            leading-tight
-            tracking-[-0.04em]
-          "
+        {/* Top heading - BIGGER */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
+          className="text-center"
         >
-          It&apos;s not just tracking.
-          <br className="hidden sm:block" />
-          <span>
-            It&apos;s <span className="text-[#7B8A4C]">CycleSync</span>
-          </span>
-        </motion.h2>
+          <Typography
+            variant="sectionTitle"
+            className="text-[#223021] text-3xl sm:text-4xl md:text-5xl"
+          >
+            It&apos;s not just tracking.
+            <br className="hidden sm:block" />
+            <span>
+              It&apos;s <span className="text-[#7B8A4C]">CycleSync</span>
+            </span>
+          </Typography>
+        </motion.div>
 
-        <motion.p
-          className="
-            mt-4
-            text-center
-            text-[15px] leading-relaxed
-            max-w-2xl mx-auto
-            text-[#3A3F27]
-            tracking-[-0.01em]
-          "
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
         >
-          This isn’t just “track your period.” It’s “here’s what your body is
-          asking for today, and here’s how to work with it instead of fighting
-          it.”
-        </motion.p>
+          <Typography
+            variant="body"
+            className="mt-4 text-center text-[15px] leading-relaxed max-w-2xl mx-auto text-[#3A3F27]"
+          >
+            This isn’t just “track your period.” It’s “here’s what your body is
+            asking for today, and here’s how to work with it instead of fighting
+            it.”
+          </Typography>
+        </motion.div>
 
-        {/* Feature grid: 3 × 3 checkerboard */}
+        {/* Feature grid */}
         <motion.div
-          className="
-            mt-12
-            grid gap-6
-            md:grid-cols-3
-            auto-rows-[minmax(0,1fr)]
-          "
+          className="mt-12 grid gap-6 md:grid-cols-3 auto-rows-[minmax(0,1fr)]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -163,19 +148,29 @@ export default function AppFeaturesSection() {
             >
               {/* Text content */}
               <div className="relative z-10">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#7B8A4C]">
+                <Typography
+                  variant="subTitle"
+                  className="text-[#7B8A4C] text-[10px] tracking-[0.18em]"
+                >
                   Feature
-                </p>
+                </Typography>
 
-                <h3 className="mt-3 text-xl sm:text-2xl font-semibold text-[#22281A] leading-snug">
+                {/* FEATURE TITLE - SMALLER */}
+                <Typography
+                  variant="sectionTitle"
+                  as="h3"
+                  className="mt-3 text-lg sm:text-xl text-[#22281A] leading-snug"
+                >
                   {f.title}
-                </h3>
+                </Typography>
 
-                <p className="mt-3 text-[13px] sm:text-[14px] leading-relaxed text-[#454733]">
+                <Typography
+                  variant="body"
+                  className="mt-3 text-[13px] sm:text-[14px] leading-relaxed text-[#454733]"
+                >
                   {f.desc}
-                </p>
+                </Typography>
 
-                {/* Extra breakdown + icon placement only for the Dashboard card */}
                 {f.title === "Your Dashboard" && (
                   <>
                     <ul className="mt-4 text-[12px] sm:text-[13px] leading-relaxed text-[#424733] space-y-1">
@@ -190,45 +185,31 @@ export default function AppFeaturesSection() {
                       <img
                         src={f.icon}
                         alt={f.title}
-                        className="
-                          mt-6
-                          w-24 h-24 sm:w-28 sm:h-28
-                          object-contain
-                          mx-auto
-                        "
+                        className="mt-6 w-24 h-24 sm:w-28 sm:h-28 object-contain mx-auto"
                       />
                     )}
                   </>
                 )}
               </div>
 
-              {/* Bottom image for NON-dashboard cards (bigger, bottom-right) */}
               {f.icon && f.title !== "Your Dashboard" && (
                 <img
                   src={f.icon}
                   alt={f.title}
-                  className="
-                    pointer-events-none select-none
-                    w-24 h-24 sm:w-28 sm:h-28
-                    object-contain
-                    absolute bottom-4 right-4
-                  "
+                  className="pointer-events-none select-none w-24 h-24 sm:w-28 sm:h-28 object-contain absolute bottom-4 right-4"
                 />
               )}
 
-              {/* CTA link */}
               <Link
                 to={f.href}
-                className="
-                  mt-5 inline-flex items-center gap-1
-                  text-[13px] font-semibold
-                  text-[#2B3A23]
-                  hover:text-[#182014]
-                  transition-colors
-                  relative z-10
-                "
+                className="mt-5 inline-flex items-center gap-1 relative z-10 hover:text-[#182014] transition-colors"
               >
-                {f.cta}
+                <Typography
+                  variant="button"
+                  className="text-[#2B3A23] text-[13px]"
+                >
+                  {f.cta}
+                </Typography>
                 <span aria-hidden="true">↗</span>
               </Link>
             </motion.div>
@@ -247,17 +228,16 @@ export default function AppFeaturesSection() {
             to="/demo"
             className="
               inline-flex items-center gap-2
-              rounded-full
-              px-8 py-3
-              text-[13px] font-semibold
-              bg-[#273721]
-              text-[#FDF7EA]
+              rounded-full px-8 py-3
+              bg-[#273721] text-[#FDF7EA]
               shadow-[0_16px_40px_rgba(0,0,0,0.35)]
               hover:bg-[#1F2C1A]
               transition-colors
             "
           >
-            Play demo
+            <Typography variant="button" className="text-[#FDF7EA]">
+              Play demo
+            </Typography>
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#C9D86D] text-[11px] text-[#1C2412]">
               ▶
             </span>

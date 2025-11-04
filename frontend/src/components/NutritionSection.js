@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Typography } from "./Typography";
 
 export default function NutritionSection() {
   return (
@@ -13,80 +14,69 @@ export default function NutritionSection() {
       "
     >
       <div className="max-w-4xl mx-auto text-center">
-        <motion.h2
-          className="text-2xl sm:text-3xl font-semibold text-[#6B7D38] leading-tight tracking-[-0.02em]"
+        {/* Heading */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Your cravings are not “lack of control.”
-        </motion.h2>
+          <Typography
+            variant="heroTitle"
+            as="h2"
+            className="font-heading text-[#6B7D38] text-3xl sm:text-4xl md:text-5xl leading-tight"
+          >
+            Your cravings are not “lack of control.”
+          </Typography>
+        </motion.div>
 
-        <motion.p
-          className="
-            mt-4
-            text-[15px] leading-relaxed
-            max-w-2xl mx-auto
-            text-black
-            tracking-[-0.01em]
-          "
+        {/* Paragraphs */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
         >
-          In luteal phase your metabolism literally increases. You often need
-          more calories, more complex carbs, more magnesium, more B6-rich
-          foods, more iron. Of course your hunger goes up. That’s not “falling
-          off.” That’s physiology.
-        </motion.p>
+          <Typography
+            variant="body"
+            className="font-body mt-4 text-[15px] max-w-2xl mx-auto text-[#2D261C]/90"
+          >
+            In luteal phase your metabolism literally increases. You often need
+            more calories, more complex carbs, more magnesium, more B6-rich
+            foods, more iron. Of course your hunger goes up. That’s not “falling
+            off.” That’s physiology.
+          </Typography>
+        </motion.div>
 
-        <motion.p
-          className="
-            mt-6
-            text-[15px] leading-relaxed
-            max-w-2xl mx-auto
-            text-black
-            tracking-[-0.01em]
-          "
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
         >
-          During menstrual phase your body wants warmth, minerals, and comfort
-          (soups, broths, cooked vegetables, iron-heavy foods). During
-          follicular/ovulation it’s easier to digest lighter foods, greens,
-          fresh fiber. During luteal, slower carbs and grounding, heavier meals
-          stabilize mood and reduce extreme PMS.
-        </motion.p>
+          <Typography
+            variant="body"
+            className="font-body mt-6 text-[15px] max-w-2xl mx-auto text-[#2D261C]/90"
+          >
+            During menstrual phase your body wants warmth, minerals, and comfort
+            (soups, broths, cooked vegetables, iron-heavy foods). During
+            follicular/ovulation it’s easier to digest lighter foods, greens,
+            fresh fiber. During luteal, slower carbs and grounding, heavier
+            meals stabilize mood and reduce extreme PMS.
+          </Typography>
+        </motion.div>
 
-        {/* === Video strip instead of small cards === */}
+        {/* Video Stories */}
         <motion.div
-          className="
-            mt-10
-            grid md:grid-cols-3 gap-6
-            text-left text-sm
-            max-w-4xl mx-auto
-          "
+          className="mt-12 grid md:grid-cols-3 gap-6 text-left text-sm max-w-4xl mx-auto items-stretch"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
         >
           {/* Menstrual video */}
-          <div
-            className="
-              rounded-2xl overflow-hidden
-              border border-[#D5C4A8]
-              bg-[#F5ECDD]/80
-              shadow-[0_18px_40px_rgba(0,0,0,0.12)]
-              flex flex-col
-            "
-          >
-            <div className="aspect-video w-full bg-[#D5C4A8]/60 flex items-center justify-center text-xs text-black/80">
-              {/* video element – swap src/poster with your real files in /public/home/ */}
+          <div className="rounded-3xl overflow-hidden border border-[#D5C4A8] bg-[#F5ECDD]/80 shadow-[0_10px_25px_rgba(0,0,0,0.08)] flex flex-col">
+            <div className="aspect-video w-full bg-[#D5C4A8]/60">
               <video
                 className="w-full h-full object-cover"
                 controls
@@ -99,28 +89,27 @@ export default function NutritionSection() {
                 Your browser does not support the video tag.
               </video>
             </div>
-            <div className="px-4 py-3">
-              <div className="text-[13px] font-semibold text-black leading-snug">
+            <div className="px-5 pt-4 pb-4">
+              <Typography
+                variant="body"
+                as="h3"
+                className="font-heading text-[15px] sm:text-[16px] text-[#22160D] leading-snug"
+              >
                 Menstrual phase · warmth & cravings
-              </div>
-              <div className="text-[12px] text-black mt-1">
+              </Typography>
+              <Typography
+                variant="bodySm"
+                className="font-body text-[12px] text-[#5A5244] mt-2 leading-relaxed"
+              >
                 A real person sharing how they honour warmth, rest and heavier
                 meals without guilt.
-              </div>
+              </Typography>
             </div>
           </div>
 
           {/* Follicular / Ovulation video */}
-          <div
-            className="
-              rounded-2xl overflow-hidden
-              border border-[#D5C4A8]
-              bg-[#F8F1E5]
-              shadow-[0_18px_40px_rgba(0,0,0,0.12)]
-              flex flex-col
-            "
-          >
-            <div className="aspect-video w-full bg-[#D5C4A8]/60 flex items-center justify-center text-xs text-black/80">
+          <div className="rounded-3xl overflow-hidden border border-[#D5C4A8] bg-[#F8F1E5] shadow-[0_10px_25px_rgba(0,0,0,0.08)] flex flex-col">
+            <div className="aspect-video w-full bg-[#D5C4A8]/60">
               <video
                 className="w-full h-full object-cover"
                 controls
@@ -133,28 +122,27 @@ export default function NutritionSection() {
                 Your browser does not support the video tag.
               </video>
             </div>
-            <div className="px-4 py-3">
-              <div className="text-[13px] font-semibold text-black leading-snug">
+            <div className="px-5 pt-4 pb-4">
+              <Typography
+                variant="body"
+                as="h3"
+                className="font-heading text-[15px] sm:text-[16px] text-[#22160D] leading-snug"
+              >
                 Follicular / ovulation · light & fresh
-              </div>
-              <div className="text-[12px] text-black mt-1">
+              </Typography>
+              <Typography
+                variant="bodySm"
+                className="font-body text-[12px] text-[#5A5244] mt-2 leading-relaxed"
+              >
                 Someone talking about feeling lighter, more social, and
                 gravitating towards greens and fresher foods.
-              </div>
+              </Typography>
             </div>
           </div>
 
           {/* Luteal video */}
-          <div
-            className="
-              rounded-2xl overflow-hidden
-              border border-[#D5C4A8]
-              bg-[#F5ECDD]/80
-              shadow-[0_18px_40px_rgba(0,0,0,0.12)]
-              flex flex-col
-            "
-          >
-            <div className="aspect-video w-full bg-[#D5C4A8]/60 flex items-center justify-center text-xs text-black/80">
+          <div className="rounded-3xl overflow-hidden border border-[#D5C4A8] bg-[#F5ECDD]/80 shadow-[0_10px_25px_rgba(0,0,0,0.08)] flex flex-col">
+            <div className="aspect-video w-full bg-[#D5C4A8]/60">
               <video
                 className="w-full h-full object-cover"
                 controls
@@ -167,34 +155,41 @@ export default function NutritionSection() {
                 Your browser does not support the video tag.
               </video>
             </div>
-            <div className="px-4 py-3">
-              <div className="text-[13px] font-semibold text-black leading-snug">
+            <div className="px-5 pt-4 pb-4">
+              <Typography
+                variant="body"
+                as="h3"
+                className="font-heading text-[15px] sm:text-[16px] text-[#22160D] leading-snug"
+              >
                 Luteal phase · grounding & carb-supportive
-              </div>
-              <div className="text-[12px] text-black mt-1">
+              </Typography>
+              <Typography
+                variant="bodySm"
+                className="font-body text-[12px] text-[#5A5244] mt-2 leading-relaxed"
+              >
                 A story on leaning into slower carbs and fullness instead of
                 labeling it as “lack of discipline.”
-              </div>
+              </Typography>
             </div>
           </div>
         </motion.div>
 
-        <motion.p
-          className="
-            mt-10
-            text-[13px] leading-relaxed
-            max-w-xl mx-auto
-            text-black
-          "
+        {/* Closing paragraph */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.4 }}
         >
-          CycleSync Plus links cravings (“need salt”, “need chocolate”, “feel
-          puffy”) to likely nutrient gaps and shows budget-friendly food ideas.
-          Not diet rules. Support.
-        </motion.p>
+          <Typography
+            variant="bodySm"
+            className="font-body mt-10 text-[13px] max-w-xl mx-auto text-[#3A3225]"
+          >
+            CycleSync Plus links cravings (“need salt”, “need chocolate”, “feel
+            puffy”) to likely nutrient gaps and shows budget-friendly food
+            ideas. Not diet rules. Support.
+          </Typography>
+        </motion.div>
       </div>
     </section>
   );
