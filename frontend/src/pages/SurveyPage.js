@@ -88,7 +88,7 @@ export default function SurveyPage() {
       setMeal3(false);
       setNote("");
 
-nav("/");   // if your hero page is on "/"
+nav("/hero");   // if your hero page is on "/"
     } catch (err) {
       console.error("Error submitting survey:", err);
       alert(err.message || "Survey submission failed");

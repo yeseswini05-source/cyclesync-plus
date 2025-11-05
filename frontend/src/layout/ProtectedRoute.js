@@ -1,12 +1,20 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
-export default function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
+export default function ProtectedRoute({ children, requireSurvey }) {
+  const token =
+    localStorage.getItem("cyclesync_token") ||
+    localStorage.getItem("cs_auth_token") ||
+    localStorage.getItem("token");
 
-  if (!token) {
-    console.log("🔒 No token → redirect login");
-    return <Navigate to="/login" replace />;
+  const surveyDone = localStorage.getItem("survey_completed") === "true";
+  const location = useLocation();
+
+  if (!token) return <Navigate to="/login" replace />;
+
+  // if survey not done → force to survey
+  if (requireSurvey && !surveyDone && location.pathname !== "/survey") {
+    return <Navigate to="/survey" replace />;
   }
 
   return children;

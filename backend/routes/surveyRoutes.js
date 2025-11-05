@@ -7,26 +7,29 @@ const SurveyLog = require("../models/SurveyLog");
 const UserCycle = require("../models/UserCycle");
 const { calculateCyclePhase } = require("../utils/cycleMath");
 
-// ✅ Submit Survey
-router.post("/submit", protect, async (req, res) => {
+// ✅ require controller properly
+const { logPhaseFromSurvey } = require("../controllers/surveyController");
+
+// ✅ Log Phase from Survey (Survey onboarding)
+router.post("/phase-log", protect, logPhaseFromSurvey);
+
+// ✅ Submit Daily Survey
+router.post("/log", protect, async (req, res) => {
   try {
     const userId = req.user.id;
     const data = req.body;
 
-    // 1) Save survey log
     await SurveyLog.create({
       userId,
       ...data,
       date: new Date()
     });
 
-    // 2) Keep only last 30 logs
     await SurveyLog.find({ userId })
       .sort({ createdAt: -1 })
       .skip(30)
       .deleteMany();
 
-    // 3) Update cycle if bleeding logged
     if (data.bleedingLevel && data.bleedingLevel !== "none") {
       await UserCycle.findOneAndUpdate(
         { userId },
@@ -35,11 +38,10 @@ router.post("/submit", protect, async (req, res) => {
       );
     }
 
-    // 4) Re-load cycle
     const cycle = await UserCycle.findOne({ userId });
-
     let calc = null;
-    if (cycle && cycle.lastPeriodDate) {
+
+    if (cycle?.lastPeriodDate) {
       calc = calculateCyclePhase(cycle.lastPeriodDate, cycle.cycleLength);
 
       await UserCycle.findOneAndUpdate(
@@ -56,57 +58,56 @@ router.post("/submit", protect, async (req, res) => {
     res.json({
       success: true,
       message: "Survey saved ✅",
-      ...(calc ? { phase: calc.phase, cycleDay: calc.day } : {}),
+      ...(calc ? { phase: calc.phase, cycleDay: calc.day } : {})
     });
 
   } catch (err) {
     console.error("Survey Save Error", err);
-    res.status(500).json({ success: false, message: err.message || "Server error" });
+    res.status(500).json({
+      success: false,
+      message: err.message || "Server error"
+    });
   }
 });
 
-// ✅ Get Results
+// ✅ Phase results endpoint
 router.get("/results", protect, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const logs = await SurveyLog.find({ userId })
-      .sort({ date: -1 })
-      .limit(7);
-
+    const logs = await SurveyLog.find({ userId }).sort({ date: -1 }).limit(7);
     const cycle = await UserCycle.findOne({ userId });
 
     res.json({ success: true, logs, cycle });
+
   } catch (err) {
     console.error("Results Error", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
+// ✅ Phase status endpoint
 router.get("/phase", protect, async (req, res) => {
   try {
     const userId = req.user.id;
     const cycle = await UserCycle.findOne({ userId });
 
-    if (!cycle || !cycle.lastPeriodDate) {
+    if (!cycle?.lastPeriodDate) {
       return res.json({ message: "No cycle data yet" });
     }
 
-    const calc = calculateCyclePhase(
-      cycle.lastPeriodDate,
-      cycle.cycleLength
-    );
+    const calc = calculateCyclePhase(cycle.lastPeriodDate, cycle.cycleLength);
 
     res.json({
       phase: calc.phase,
       cycleDay: calc.day,
       nextPeriod: calc.nextPeriod
     });
+
   } catch (err) {
     console.error("Phase Error", err);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 
 module.exports = router;

@@ -4,68 +4,78 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import OpeningPage from "../pages/OpeningPage";
 import LandingPage from "../pages/LandingPage";
-
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 
 import DashboardPage from "../pages/DashboardPage";
 import SurveyPage from "../pages/SurveyPage";
+import SurveyForPhasePage from "../pages/SurveyForPhasePage";
+import PhaseTrackerPage from "../pages/PhaseTrackerPage";
 import TrackerPage from "../pages/TrackerPage";
+
 import RecommendationsPage from "../pages/RecommendationsPage";
 import NotificationsPage from "../pages/NotificationsPage";
-
 import PostsPage from "../pages/PostsPage";
 import ChatPage from "../pages/ChatPage";
-
-/* new feature marketing / explainer pages */
-import PhaseTrackerPage from "../pages/PhaseTrackerPage.js";
-import DailyCheckinPage from "../pages/DailyCheckinPage.js";
-import FoodRecsPage from "../pages/FoodRecsPage.js";
-import ActivityRestPage from "../pages/ActivityRestPage.js";
-import NutrientSignalsPage from "../pages/NutrientSignalsPage.js";
+import DailyCheckinPage from "../pages/DailyCheckinPage";
+import FoodRecsPage from "../pages/FoodRecsPage";
+import ActivityRestPage from "../pages/ActivityRestPage";
+import NutrientSignalsPage from "../pages/NutrientSignalsPage";
 
 export default function AppRouter() {
   return (
     <Routes>
-      {/* default entry splash */}
+      {/* PUBLIC */}
       <Route path="/" element={<OpeningPage />} />
-      <Route path="/opening" element={<OpeningPage />} />
-
-      {/* landing/marketing app home after intro */}
       <Route path="/landing" element={<LandingPage />} />
-
-      {/* auth */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-      {/* community-ish / public */}
+      {/* PUBLIC FEATURE PREVIEW PAGES */}
       <Route path="/posts" element={<PostsPage />} />
       <Route path="/chat" element={<ChatPage />} />
-
-      {/* public feature pages (from landing cards) */}
-      <Route path="/phase-tracker" element={<PhaseTrackerPage />} />
       <Route path="/daily-checkin" element={<DailyCheckinPage />} />
       <Route path="/food-recs" element={<FoodRecsPage />} />
       <Route path="/activity-rest" element={<ActivityRestPage />} />
       <Route path="/nutrient-signals" element={<NutrientSignalsPage />} />
 
-      {/* protected/private user stuff */}
+      {/* ✅ SURVEY MUST BE DONE BEFORE ANY OTHER APP ACCESS */}
       <Route
-        path="/dashboard"
+        path="/survey"
+        element={
+          <ProtectedRoute requireSurvey>
+            <SurveyPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* ✅ Only opens if user clicks — NOT forced */}
+      <Route
+        path="/survey-phase"
         element={
           <ProtectedRoute>
-            <DashboardPage />
+            <SurveyForPhasePage />
           </ProtectedRoute>
         }
       />
 
       <Route
-        path="/survey"
+        path="/phase-tracker"
         element={
           <ProtectedRoute>
-            <SurveyPage />
+            <PhaseTrackerPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* AUTHENTICATED NORMAL ROUTES */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
           </ProtectedRoute>
         }
       />
@@ -97,7 +107,7 @@ export default function AppRouter() {
         }
       />
 
-      {/* fallback */}
+      {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

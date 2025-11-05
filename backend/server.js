@@ -4,6 +4,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
+const reminders = require("./routes/reminders");
+const cycleRoutes = require("./routes/cycleRoutes");
+
+app.use("/api/cycles", cycleRoutes);
+
+app.use("/api/reminders", reminders);
 
 // ---------- Middleware ----------
 app.use(express.json({ limit: "10mb" }));

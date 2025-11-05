@@ -19,7 +19,10 @@ const UserSchema = new mongoose.Schema({
     detectedPhase: String,
     data: Object,
     updatedAt: Date
-  }
+  },
+  cycleSurveyDone: { type: Boolean, default: false },
+cycleStartDate: { type: Date },
+
 
 }, { timestamps: true });
 

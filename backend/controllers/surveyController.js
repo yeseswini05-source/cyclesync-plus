@@ -1,58 +1,91 @@
-const mongoose = require("mongoose");
+const SurveyLog = require("../models/SurveyLog");
+const Recommendation = require("../models/recommendation");
+const UserCycle = require("../models/UserCycle");
+const { calculateCyclePhase } = require("../utils/cycleMath");
 
-const recommendationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  text: String,
-  createdAt: { type: Date, default: Date.now }
-});
-
-module.exports = mongoose.model("Recommendation", recommendationSchema);
-
-// --- Simple ML-like mapping (can be tuned later) ---
+// --- Phase Detection Logic ---
 function mapSurveyToPhase(survey) {
   const { mood, cramps, flow, energy, sleep, appetite, motivation } = survey;
 
-  // Example rule-based mapping (you can replace with ML model later)
   if (flow > 6 && cramps > 5) return "Menstrual";
   if (energy > 7 && motivation > 6 && flow < 3) return "Follicular";
   if (mood > 6 && energy > 7 && cramps < 3) return "Ovulatory";
   if (mood < 5 && energy < 5 && appetite > 6) return "Luteal";
-  return "Follicular"; // default fallback
+
+  return "Follicular";
 }
 
-// --- Controller: get phase + recommendations ---
-exports.analyzeSurvey = async (req, res) => {
+// ✅ Analyze survey & return phase + recommendations
+const analyzeSurvey = async (req, res) => {
   try {
     const survey = req.body;
-    if (!survey) return res.status(400).json({ message: "Survey data missing" });
+    if (!survey)
+      return res.status(400).json({ message: "Survey data missing" });
 
     const phase = mapSurveyToPhase(survey);
-
     const recs = await Recommendation.find({ phase });
-    res.json({ detectedPhase: phase, recommendations: recs });
+
+    res.json({
+      detectedPhase: phase,
+      recommendations: recs,
+    });
   } catch (err) {
     console.error("Survey analysis error:", err);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-exports.submitSurvey = async (req, res) => {
+
+// ✅ Submit phase survey log & update cycle
+const logPhaseFromSurvey = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { mood, pain, cravings, energy } = req.body;
+    const data = req.body;
 
-    const log = await SurveyLog.create({
-      user: userId,
-      mood,
-      pain,
-      cravings,
-      energy,
-      date: new Date()
+    await SurveyLog.create({
+      userId,
+      ...data,
+      date: new Date(),
     });
 
-    res.json({ success: true, message: "Survey saved", log });
+    // If period logged → update cycle start date
+    if (data.flow && data.flow > 5) {
+      await UserCycle.findOneAndUpdate(
+        { userId },
+        { lastPeriodDate: new Date() },
+        { upsert: true }
+      );
+    }
+
+    const cycle = await UserCycle.findOne({ userId });
+
+    let calc = null;
+    if (cycle && cycle.lastPeriodDate) {
+      calc = calculateCyclePhase(cycle.lastPeriodDate, cycle.cycleLength);
+
+      await UserCycle.findOneAndUpdate(
+        { userId },
+        {
+          currentPhase: calc.phase,
+          cycleDay: calc.day,
+          predictedNextPeriod: calc.nextPeriod,
+        },
+        { upsert: true }
+      );
+    }
+
+    res.json({
+      success: true,
+      message: "Phase survey logged ✅",
+      ...(calc ? { phase: calc.phase, day: calc.day } : {}),
+    });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ success: false, message: "Server Error" });
+    console.error("Survey log error:", err);
+    res.status(500).json({ message: "Error logging phase" });
   }
 };
 
+// ✅ Export all
+module.exports = {
+  analyzeSurvey,
+  logPhaseFromSurvey,
+};
