@@ -81,70 +81,37 @@ export default function SurveyForPhasePage() {
     return `${yyyy}-${mm}-${dd}`;
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+ async function handleSubmit(e) {
+  e.preventDefault();
 
-    // form-level validation
-    const validationError = validateInputs(cycleStartDate, cycleLength);
-    if (validationError) {
-      showToast({ type: "error", message: validationError });
-      return;
-    }
-
-    if (!token) {
-      showToast({ type: "error", message: "You need to be logged in to track your cycle. Redirecting to login..." });
-      setTimeout(() => navigate("/login"), 900);
-      return;
-    }
-
-    setSaving(true);
-
-    // final payload
-    const startDateToSend = dontRemember ? estimateStartDate(cycleLength) : cycleStartDate;
-    const payload = {
-      cycleStartDate: startDateToSend,
-      cycleLength: Number(cycleLength),
-      symptoms,
-      note: note.trim(),
-      source: "survey-for-phase",
-    };
-
-    try {
-      const res = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.ok) {
-        showToast({ type: "success", message: "Saved — redirecting to Phase Tracker…" });
-        setTimeout(() => navigate("/phase-tracker"), 800);
-        return;
-      }
-
-      // server responded with error -> show message from server if present
-      let errMsg = `Failed to log cycle (${res.status})`;
-      try {
-        const errJson = await res.json();
-        if (errJson?.message) errMsg = errJson.message;
-      } catch {}
-      // fallback: save locally
-      savePendingLocally(payload);
-      showToast({ type: "error", message: `${errMsg}. Saved locally — will sync when online.` });
-      setTimeout(() => navigate("/phase-tracker"), 900);
-    } catch (err) {
-      console.error("Network/submit error:", err);
-      // network error -> save to localStorage for later sync
-      savePendingLocally(payload);
-      showToast({ type: "error", message: "Network error — saved locally and will sync later." });
-      setTimeout(() => navigate("/phase-tracker"), 900);
-    } finally {
-      setSaving(false);
-    }
+  const validationError = validateInputs(cycleStartDate, cycleLength);
+  if (validationError) {
+    showToast({ type: "error", message: validationError });
+    return;
   }
+
+  setSaving(true);
+
+  // final date (real or estimated)
+  const startDateToSend = dontRemember ? estimateStartDate(cycleLength) : cycleStartDate;
+
+  // construct the object we will save
+  const formData = {
+    cycleStartDate: startDateToSend,
+    cycleLength: Number(cycleLength),
+    symptoms,
+    note: note.trim(),
+    createdAt: new Date().toISOString(),
+  };
+
+  // ✅ Save to localStorage instead of backend
+  localStorage.setItem("phase_tracking_data", JSON.stringify(formData));
+
+  showToast({ type: "success", message: "Saved — redirecting to Phase Tracker…" });
+
+  setTimeout(() => navigate("/phase-tracker"), 800);
+}
+
 
   function savePendingLocally(payload) {
     try {
